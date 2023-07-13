@@ -3,12 +3,8 @@ package com.raghib.selenium;
 import java.io.File;
 import java.io.IOException;
 import java.time.Duration;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -18,15 +14,16 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 //UDEMY - SECTION-38
-/*C:\Raghib_Data\Study\TESTING\New folder_2\1-B_SELANIUM\0.1Udemy - Selenium WebDriver with Java -Basics to Advanced+Frameworks\38.File Uploading (AUTO IT) & Downloading with Selenium\140XDPHH */
+/*C:\STUDY_DATA\TESTING\New folder_2\1-B_SELANIUM\0.1Udemy - Selenium WebDriver with Java -Basics to Advanced+Frameworks\38.File Uploading (AUTO IT) & Downloading with Selenium\140XDPHH */
 
 public class FileUploadAndDownload {
 
 	public static void main(String[] args) throws InterruptedException, IOException {
-		//FileUploadAndDownload.FileUploadUsingAUTOIT();
-		FileUploadAndDownload.FileDownloadOfAUTOIT();
-		//FileUploadAndDownload.FileUploadUsingSendKeys();
-		//FileUploadAndDownload.FileDownloadOfSendKeys();
+		//FileUploadAndDownload.OnlyFileUploadUsingSendKeys();
+		//FileUploadAndDownload.FileUploadAndDownloadUsingSendKeys();
+		
+		//FileUploadAndDownload.OnlyFileUploadUsingAUTOIT();
+		FileUploadAndDownload.FileUploadAndDownloadUsingAUTOIT();
 	}
 
 	public static String urlPath1 = "https://pdf2jpg.net/";
@@ -46,7 +43,19 @@ public class FileUploadAndDownload {
 	
 	public static Duration duration = Duration.ofSeconds(30);
 	
-	public static void FileDownloadOfSendKeys() throws InterruptedException {
+	public static void OnlyFileUploadUsingSendKeys() throws InterruptedException {
+		System.setProperty("webdriver.chrome.driver", chromeDriverPath + "\\Driver\\chromedriver.exe");
+		WebDriver driver = new ChromeDriver();
+		driver.get(urlPath);
+		driver.manage().window().maximize();
+		Thread.sleep(5000);
+		driver.findElement(By.xpath(uploadButtonxpathLocatorForSendKeys))
+				.sendKeys(uploadFilePath + "\\UploadFile\\Shakreen.pdf");
+		Thread.sleep(5000);
+		driver.quit();
+	}
+	
+	public static void FileUploadAndDownloadUsingSendKeys() throws InterruptedException, IOException {
 		System.setProperty("webdriver.chrome.driver", chromeDriverPath + "\\Driver\\chromedriver.exe");
 
 		mapObject.put("profile.default_content_setting.popups", 0);
@@ -72,33 +81,20 @@ public class FileUploadAndDownload {
 		File fileObject = new File(downloadFilePath+"\\"+"Shakreen_page-0001.jpg");
 		System.out.println("fileObject : " + fileObject);
 		Thread.sleep(50000);
-		if (fileObject.exists()) {
-			System.out.println("File Download Successfully!");			
-			System.out.println("fileObject.delete() : "+fileObject.delete());
-			if (fileObject.delete()) {
-				System.out.println("File Deleted!");
-			}
-		} else {
-			System.out.println("File Download Failed!");
-		}
+		
+		DeleteFile();
+		/*
+		 * if (fileObject.exists()) { System.out.println("File Download Successfully!");
+		 * System.out.println("fileObject.delete() : "+fileObject.delete()); if
+		 * (fileObject.delete()) { System.out.println("File Deleted!"); } } else {
+		 * System.out.println("File Download Failed!"); }
+		 */
 		Thread.sleep(10000);
 		driver.quit();
 		 
 	}
 	
-	public static void FileUploadUsingSendKeys() throws InterruptedException {
-		System.setProperty("webdriver.chrome.driver", chromeDriverPath + "\\Driver\\chromedriver.exe");
-		WebDriver driver = new ChromeDriver();
-		driver.get(urlPath);
-		driver.manage().window().maximize();
-		Thread.sleep(5000);
-		driver.findElement(By.xpath(uploadButtonxpathLocatorForSendKeys))
-				.sendKeys(uploadFilePath + "\\UploadFile\\Shakreen.pdf");
-		Thread.sleep(5000);
-		driver.quit();
-	}
-	
-	public static void FileUploadUsingAUTOIT() throws InterruptedException, IOException {
+	public static void OnlyFileUploadUsingAUTOIT() throws InterruptedException, IOException {
 		System.setProperty("webdriver.chrome.driver", chromeDriverPath + "\\Driver\\chromedriver.exe");
 		WebDriver driver = new ChromeDriver();
 		driver.get(urlPath1);
@@ -106,12 +102,12 @@ public class FileUploadAndDownload {
 		Thread.sleep(5000);
 		driver.findElement(By.xpath(uploadButtonxpathLocatorForClick)).click();
 		Thread.sleep(50000);
-		Runtime.getRuntime().exec("C:\\Users\\raghi\\automation-workspace\\FileUplaodAndDownload\\AUTOITFolder\\fileupload.exe");
+		Runtime.getRuntime().exec(uploadFilePath + "\\AUTOITFolder\\fileupload.exe");
 		Thread.sleep(50000);
 		driver.quit();
 	}
 
-	public static void FileDownloadOfAUTOIT() throws InterruptedException, IOException {
+	public static void FileUploadAndDownloadUsingAUTOIT() throws InterruptedException, IOException {
 		System.setProperty("webdriver.chrome.driver", chromeDriverPath + "\\Driver\\chromedriver.exe");
 
 		mapObject.put("profile.default_content_setting.popups", 0);
@@ -137,6 +133,22 @@ public class FileUploadAndDownload {
 		Thread.sleep(5000);
 		driver.findElement(By.xpath(downloadFile)).click();
 		
+		DeleteFile();
+		
+		/*
+		 * File fileObject = new File(downloadFilePath+"\\"+"Shakreen-page-001.jpg");
+		 * System.out.println("fileObject : " + fileObject); Thread.sleep(50000); if
+		 * (fileObject.exists()) { System.out.println("File Download Successfully!");
+		 * System.out.println("fileObject.delete() : "+fileObject.delete()); if
+		 * (fileObject.delete()) { System.out.println("File Deleted!"); } } else {
+		 * System.out.println("File Download Failed!"); }
+		 */
+		Thread.sleep(10000);
+		driver.quit();
+		 
+	}
+
+	public static void DeleteFile() throws InterruptedException, IOException {
 		File fileObject = new File(downloadFilePath+"\\"+"Shakreen-page-001.jpg");
 		System.out.println("fileObject : " + fileObject);
 		Thread.sleep(50000);
@@ -149,8 +161,5 @@ public class FileUploadAndDownload {
 		} else {
 			System.out.println("File Download Failed!");
 		}
-		Thread.sleep(10000);
-		driver.quit();
-		 
 	}
 }
